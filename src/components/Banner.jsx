@@ -2,6 +2,8 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import categories, { getMovies } from "../api";
+import { FaPlay } from "react-icons/fa";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import "./Banner.css";
 
 const Banner = () => {
@@ -10,35 +12,52 @@ const Banner = () => {
     try {
       const data = await getMovies(
         categories.find((category) => category.name === "netflixOriginals").path
-        );
-        const randomIndex = Math.floor(Math.random() * data.results.length)
-        setMovie(data?.results[randomIndex])
+      );
+      const randomIndex = Math.floor(Math.random() * data.results.length);
+      setMovie(data?.results[randomIndex]);
     } catch (error) {
       console.log("Banner error", error);
     }
   };
 
   useEffect(() => {
-    fetchRandomMovie()
+    fetchRandomMovie();
   }, []);
 
   return (
-
-  <header className="banner-container" style={{backgroundSize: "cover", backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`, backgroundPosition: "center-center"}}>
-    <div className="banner-content">
-      <h1 className="banner-title">
-        {movie?.title || movie?.name || movie?.original_name}
-      </h1>
-      <div className="banner-button-container">
-        <div className="banner-button">Assistir</div>
-        <div className="banner-button">Minha Lista</div>
+    <header
+      className="banner-container"
+      style={{
+        backgroundSize: "cover",
+        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
+        backgroundPosition: "center-center",
+      }}
+    >
+      <div className="banner-content">
+        <h1 className="banner-title">
+          {movie?.title || movie?.name || movie?.original_name}
+        </h1>
+        <div className="banner-button-container">
+          <div className="banner-button">
+            <span>
+              <FaPlay />
+            </span>
+            Assistir
+          </div>
+          <div className="banner-button">
+            {" "}
+            <span>
+              <AiOutlineInfoCircle />
+            </span>{" "}
+            Mais Informações
+          </div>
+        </div>
+        <div className="banner-description">
+          <p>{movie?.overview}</p>
+        </div>
       </div>
-      <div className="banner-description">
-        <p>{movie?.overview}</p>
-      </div>
-    </div>
-  </header>
-  )
+    </header>
+  );
 };
 
 export default Banner;
